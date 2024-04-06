@@ -24,4 +24,7 @@ React + Fire base introduction for web application. It includes functionalities 
    REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
    REACT_APP_FIREBASE_APP_ID=your-app-id
 
-   
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
