@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { app } from "../firebase";
 import InputSubCollection from "./InputSubCollection";
+import { useFireBase } from "../context/Firebase";
 
 const firestore = getFirestore(app);
 
@@ -19,16 +20,24 @@ function InputData() {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [phone, setPhone] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
+  const { imageUpload } = useFireBase();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     // Insert the data to the Firestore "users" collection
     try {
+      // first insert the image file to the firebase storage
+      const result = await imageUpload(profilePic);
+
       const docRef = await addDoc(collection(firestore, "users"), {
         name,
         age,
         phoneNo: phone,
+        imageUrl: result.ref.fullPath,
       });
+
       console.log("Document written with ID: ", docRef);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -107,6 +116,17 @@ function InputData() {
             value={phone}
             onChange={(e) => {
               setPhone(e.target.value);
+            }}
+          />
+        </label>
+
+        <label>
+          Profile Pic:
+          <input
+            type="file"
+            required
+            onChange={(e) => {
+              setProfilePic(e.target.files[0]);
             }}
           />
         </label>
