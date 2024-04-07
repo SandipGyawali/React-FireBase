@@ -19,6 +19,9 @@ function NavBar() {
         <Nav.Item as={Link} to="/auth/login">
           LogIn
         </Nav.Item>
+        <Nav.Item as={Link} to="/inputData">
+          InputData
+        </Nav.Item>
       </Nav>
     </Navbar>
   );
