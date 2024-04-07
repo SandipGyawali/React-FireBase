@@ -22,6 +22,9 @@ function NavBar() {
         <Nav.Item as={Link} to="/inputData">
           InputData
         </Nav.Item>
+        <Nav.Item as={Link} to="/users-list">
+          UsersList
+        </Nav.Item>
       </Nav>
     </Navbar>
   );
