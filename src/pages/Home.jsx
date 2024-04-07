@@ -3,11 +3,13 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase";
 import { Navigate } from "react-router-dom";
+import { useFireBase } from "../context/Firebase";
 
 const auth = getAuth(app);
 
 function Home() {
   const [loggedUser, setLoggedUser] = useState(); // Initialize loggedUser with null
+  const { get_Token } = useFireBase();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -20,6 +22,23 @@ function Home() {
 
     return () => unsubscribe(); // Cleanup function
   }, []);
+
+  useEffect(() => {
+    //request user for notification permission
+
+    async function requestPermission() {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        //generate token
+        const token = await get_Token();
+        console.log(token);
+      } else if (permission === "denied") {
+        alert("Notification denied");
+      }
+    }
+
+    requestPermission();
+  }, [get_Token]);
 
   // Check if loggedUser is null and navigate accordingly
   if (loggedUser === null) {

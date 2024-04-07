@@ -10,24 +10,17 @@ import {
 } from "firebase/auth";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getMessaging, getToken } from "firebase/messaging";
 
 // fire-base config object
-const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
-  measurementId: "",
-  databaseUrl: "",
-};
+const firebaseConfig = {};
 
 const firebaseApp = initializeApp(firebaseConfig); // app instance
 const firebaseAuth = getAuth(firebaseApp); // auth instance
 const googleProvider = new GoogleAuthProvider(); // o-auth google instance
-const firestore = getFirestore(firebaseApp);
-const storage = getStorage(firebaseApp);
+const firestore = getFirestore(firebaseApp); // fire-store instance
+const storage = getStorage(firebaseApp); //storage instance for messaging in firebase
+const messaging = getMessaging(firebaseApp); // instance for messaging in firebase
 
 const FirebaseContext = createContext(null);
 export const useFireBase = () => useContext(FirebaseContext); //firebase context
@@ -71,6 +64,13 @@ export const FirebaseContextProvider = (props) => {
     return users;
   };
 
+  const get_Token = async () => {
+    return await getToken(messaging, {
+      vapidKey:
+        "BNd1_7P4EstNZfssyq-1p8wyUXiwpSBMuKoLc3guL1I728QyQVh76HFZFmXEMBhjylzv2lvA67XlsYBm__dnB6s",
+    });
+  };
+
   return (
     <FirebaseContext.Provider
       value={{
@@ -79,6 +79,7 @@ export const FirebaseContextProvider = (props) => {
         signInWithGoogle,
         getAllUsers,
         imageUpload,
+        get_Token,
       }}
     >
       {children}
